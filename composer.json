@@ -1,29 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "morbzeno/prueba-de-plugin",
+    "description": "This is my package prueba-de-plugin",
     "keywords": [
-        ":vendor_name",
+        "Morbzeno",
         "laravel",
-        ":package_slug"
+        "prueba-de-plugin"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/morbzeno/prueba-de-plugin",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/morbzeno/prueba-de-plugin/issues",
+        "source": "https://github.com/morbzeno/prueba-de-plugin"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Luis",
+            "email": "2123100609@soy.utj.edu.mx",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
         "filament/filament": "^3.0",
-        "filament/forms": "^3.0",
-        "filament/tables": "^3.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -41,13 +39,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Morbzeno\\PruebaDePlugin\\": "src/",
+            "Morbzeno\\PruebaDePlugin\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "Morbzeno\\PruebaDePlugin\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -67,13 +65,19 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Morbzeno\\PruebaDePlugin\\PruebaDePluginServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "PruebaDePlugin": "Morbzeno\\PruebaDePlugin\\Facades\\PruebaDePlugin"
             }
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "prueba-de-plugin": {
+            "type": "path",
+            "url": "./prueba-de-plugin"
+        }
+    }
 }
