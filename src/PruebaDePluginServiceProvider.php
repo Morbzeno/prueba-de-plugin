@@ -10,11 +10,11 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
+use Morbzeno\PruebaDePlugin\Commands\PruebaDePluginCommand;
+use Morbzeno\PruebaDePlugin\Testing\TestsPruebaDePlugin;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Morbzeno\PruebaDePlugin\Commands\PruebaDePluginCommand;
-use Morbzeno\PruebaDePlugin\Testing\TestsPruebaDePlugin;
 
 class PruebaDePluginServiceProvider extends PackageServiceProvider
 {
@@ -149,25 +149,25 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
             'create_prueba-de-plugin_table',
         ];
     }
+
     public function boot()
     {
 
         $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations'),
-            __DIR__.'/../database/seeders/' => database_path('seeders'),
-            __DIR__.'/../database/factories/' => database_path('factories'),
-            __DIR__.'/../resources/views' => resource_path('views'),
-            __DIR__.'/../tests' => base_path('tests/'),
-            __DIR__.'/../app/Mail' => app_path('mail'),
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
+            __DIR__ . '/../database/seeders/' => database_path('seeders'),
+            __DIR__ . '/../database/factories/' => database_path('factories'),
             __DIR__ . '/../resources/views' => resource_path('views'),
-            __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers/Vendor/PruebaDePlugin'),
+            __DIR__ . '/../tests' => base_path('tests/'),
+            __DIR__ . '/../app/Mail' => app_path('mail'),
+            __DIR__ . '/../resources/views' => resource_path('views'),
+            __DIR__ . '/../app/Http/Controllers' => app_path('Http/Controllers/Vendor/PruebaDePlugin'),
         ], 'prueba-de-plugin-morbzeno');
-    
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'prueba-de-plugin');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'prueba-de-plugin');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'prueba-de-plugin');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'prueba-de-plugin');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 }

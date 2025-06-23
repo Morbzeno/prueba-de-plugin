@@ -4,15 +4,14 @@ namespace Database\Factories;
 
 // database/factories/BlogFactory.php
 
-use Morbzeno\PruebaDePlugin\Blogs;
-use Morbzeno\PruebaDePlugin\Tag;
-use Morbzeno\PruebaDePlugin\Category;
-use Morbzeno\PruebaDePlugin\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Morbzeno\PruebaDePlugin\Blogs;
+use Morbzeno\PruebaDePlugin\Category;
+use Morbzeno\PruebaDePlugin\Tag;
+use Morbzeno\PruebaDePlugin\User;
 
 class BlogsFactory extends Factory
 {
-
     public function definition(): array
     {
         return [
@@ -37,4 +36,4 @@ class BlogsFactory extends Factory
             $blog->tags()->sync($tags);
         });
     }
-};
+}

@@ -18,28 +18,28 @@ class Category extends Model
         'slug',
     ];
 
-    public function blog ()
+    public function blog()
     {
         return $this->hasMany(Blogs::class);
     }
+
     protected static function boot()
     {
         parent::boot();
 
         static::saved(function ($category) {
-            if (!Str::endsWith($category->slug, '-' . $category->id)) {
+            if (! Str::endsWith($category->slug, '-' . $category->id)) {
                 $category->slug = Str::slug($category->name) . '-' . $category->id;
-                $category->saveQuietly(); 
+                $category->saveQuietly();
             }
         });
 
-        static::created(function($category){
-            if (!Str::endsWith($category->slug, '-' . $category->id)) {
+        static::created(function ($category) {
+            if (! Str::endsWith($category->slug, '-' . $category->id)) {
                 $category->slug = Str::slug($category->name) . '-' . $category->id;
-                $category->saveQuietly(); 
+                $category->saveQuietly();
             }
         });
 
     }
-
 }

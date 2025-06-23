@@ -2,9 +2,9 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource\Pages;
 
-use Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource;
 
 class ListTags extends ListRecords
 {
