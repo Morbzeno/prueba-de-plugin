@@ -156,11 +156,10 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
             __DIR__.'/../database/migrations/' => database_path('migrations'),
             __DIR__.'/../database/seeders/' => database_path('seeders'),
             __DIR__.'/../database/factories/' => database_path('factories'),
-            __DIR__.'/../resources/views' => resource_path('views'),
             __DIR__.'/../tests' => base_path('tests/'),
             __DIR__.'/../app/Mail' => app_path('mail'),
-            __DIR__ . '/../resources/views' => resource_path('views'),
-            __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers/Vendor/PruebaDePlugin'),
+            __DIR__ . '/../resources/views' => resource_path('views/'),
+            __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers'),
         ], 'prueba-de-plugin-morbzeno');
     
 

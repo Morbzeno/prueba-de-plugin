@@ -40,7 +40,8 @@
     "autoload": {
         "psr-4": {
             "Morbzeno\\PruebaDePlugin\\": "src/",
-            "Morbzeno\\PruebaDePlugin\\Database\\Factories\\": "database/factories/"
+            "Morbzeno\\PruebaDePlugin\\Database\\Factories\\": "database/factories/",
+             "Morbzeno\\PruebaDePlugin\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

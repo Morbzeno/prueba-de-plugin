@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Morbzeno\PruebaDePlugin\Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use Morbzeno\PruebaDePlugin\Models\User;
 
 class UserSeeder extends Seeder
 {

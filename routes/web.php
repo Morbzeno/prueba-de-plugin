@@ -50,7 +50,7 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
         event(new Verified($user));
     }
 
-    return redirect('/panel')->with('message', 'Email verified!');
+    return redirect(filament()->getUrl())->with('message', 'Email verified!');
 })->middleware(['signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {

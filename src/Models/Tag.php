@@ -57,4 +57,9 @@ class Tag extends Model
             }
         });
     }
+
+    public static function newFactory()
+{
+    return \Database\Factories\TagFactory::new();
+}
 }

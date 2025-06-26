@@ -43,7 +43,8 @@ class CategoryResource extends Resource
 
                 TextInput::make('slug')
                 ->label('slug')
-                ->visible(fn (String $operation) => $operation === 'edit'),
+                ->visible(fn (String $operation) => $operation === 'edit')
+                ->unique(ignoreRecord:true ),
             ]);
     }
 

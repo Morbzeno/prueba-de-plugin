@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Morbzeno\PruebaDePlugin\Database\Seeders;
 
 use Morbzeno\PruebaDePlugin\Models\Blogs;
 use Morbzeno\PruebaDePlugin\Models\Tag;

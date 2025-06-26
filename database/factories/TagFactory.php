@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 
-use Morbzeno\PruebaDePlugin\Tag;
+use Morbzeno\PruebaDePlugin\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TagFactory extends Factory

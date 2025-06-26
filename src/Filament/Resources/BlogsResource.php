@@ -2,9 +2,11 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources;
 
+use Filament\Forms\Components\MultiSelect;
 use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource\Pages;
 use App\Filament\Resources\BlogsResource\RelationManagers;
 use Morbzeno\PruebaDePlugin\Models\Blogs;
+use Morbzeno\PruebaDePlugin\Models\Tag;
 use Illuminate\Support\Facades\Gate;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -74,17 +76,6 @@ class BlogsResource extends Resource
                     titleAttribute: 'name',
                 )
                 ->required()
-                ->native(false),
-            
-            Select::make('tags')
-                ->label('Etiquetas')
-                ->multiple()
-                ->relationship(
-                    name: 'tags',
-                    titleAttribute: 'name',
-                )
-                ->required()
-                ->preload()
                 ->native(false)
                 ->createOptionForm([
                     Forms\Components\TextInput::make('name')
@@ -92,10 +83,39 @@ class BlogsResource extends Resource
                     Forms\Components\TextInput::make('description')
                 ]),
             
-                TextInput::make('slug')
-                ->label('slug')
-                ->visible(fn (String $operation) => $operation === 'edit')
-            ]);
+            // Select::make('tags')
+            //     ->label('Etiquetas')
+            //     ->multiple()
+            //     ->relationship(
+            //         name: 'tags',
+            //         titleAttribute: 'name',
+            //     )
+            //     ->required()
+            //     ->preload()
+            //     ->native(false)
+            //     ->createOptionForm([
+            //         Forms\Components\TextInput::make('name')
+            //         ->required(),
+            //         Forms\Components\TextInput::make('description')
+            //     ]),
+            
+            MultiSelect::make('tags')
+            ->label('Etiquetas')
+            ->relationship('tags', 'name') // <- relación Eloquent
+            ->searchable()
+            ->preload()
+            ->createOptionUsing(function (string $value) {
+                $tag = Tag::create(['name' => $value]);
+                return $tag->getKey(); // Retorna el ID como clave
+            })
+            ->required(),
+
+
+            TextInput::make('slug')
+            ->label('slug')
+            ->visible(fn (String $operation) => $operation === 'edit')
+            ->unique(ignoreRecord:true)
+        ]);
                 
     }
 
@@ -110,7 +130,7 @@ class BlogsResource extends Resource
                 ->circular(),
                 TextColumn::make('title')
                 ->label('Titulo'),
-                TextColumn::make('author')
+                TextColumn::make('users.name')
                 ->label('Autor')
                 
 
@@ -149,11 +169,7 @@ class BlogsResource extends Resource
             'edit' => Pages\EditBlogs::route('/{record}/edit'),
         ];
     }
-    
-    public static function canViewAny(): bool
-    {
-        return Gate::allows('ver_cualquier_publicacion');
-    }
+
 
     public static function canEdit(Model $record): bool
     {
@@ -169,4 +185,27 @@ class BlogsResource extends Resource
     {
         return auth()->user()->can('crear_publicacion');
     }
+
+    protected static function syncTags(Form $form, Model $post): void
+{
+    $tagNames = collect($form->getState()['tags'])
+        ->map(fn($tag) => trim($tag))
+        ->filter()
+        ->unique();
+
+    $tagIds = [];
+
+    foreach ($tagNames as $name) {
+        $tag = \App\Models\Tag::firstOrCreate([
+            'name' => $name,
+        ], [
+            'slug' => \Str::slug($name),
+        ]);
+
+        $tagIds[] = $tag->id;
+    }
+
+    $post->tags()->sync($tagIds);
+}
+
 }

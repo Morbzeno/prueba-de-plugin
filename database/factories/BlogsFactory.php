@@ -1,13 +1,12 @@
 <?php
 
-namespace Database\Factories;
-
+namespace Morbzeno\PruebaDePlugin\Database\Factories;
 // database/factories/BlogFactory.php
 
-use Morbzeno\PruebaDePlugin\Blogs;
-use Morbzeno\PruebaDePlugin\Tag;
-use Morbzeno\PruebaDePlugin\Category;
-use Morbzeno\PruebaDePlugin\User;
+use Morbzeno\PruebaDePlugin\Models\Blogs;
+use Morbzeno\PruebaDePlugin\Models\Tag;
+use Morbzeno\PruebaDePlugin\Models\User;
+use Morbzeno\PruebaDePlugin\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BlogsFactory extends Factory

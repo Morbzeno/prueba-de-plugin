@@ -40,6 +40,25 @@ class Category extends Model
             }
         });
 
+        static::creating(function ($category) {
+            if (!$category->slug) {
+                $baseSlug = $category->name;
+                $slug = Str::slug($baseSlug);
+                $original = $slug;
+                $i = 1;
+    
+                while (self::where('slug', $slug)->exists()) {
+                    $slug = $original . '-' . $i++;
+                }
+    
+                $category->slug = $slug;
+            }
+        });
+
     }
+    public static function newFactory()
+{
+    return \Database\Factories\CategoryFactory::new();
+}
 
 }

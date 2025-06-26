@@ -45,6 +45,7 @@ class TagsResource extends Resource
                 TextInput::make('slug')
                 ->label('slug')
                 ->visible(fn (String $operation) => $operation === 'edit')
+                ->unique(ignoreRecord:true )
             
                 
             ]);
