@@ -17,4 +17,4 @@ class CategoryFactory extends Factory
             'slug' => $this->faker->word(),
         ];
     }
-};
+}

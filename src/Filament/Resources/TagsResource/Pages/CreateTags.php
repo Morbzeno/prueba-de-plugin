@@ -2,9 +2,8 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource\Pages;
 
-use Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource;
 
 class CreateTags extends CreateRecord
 {

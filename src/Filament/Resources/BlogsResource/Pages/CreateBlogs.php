@@ -2,9 +2,8 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource\Pages;
 
-use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource;
 
 class CreateBlogs extends CreateRecord
 {

@@ -9,26 +9,27 @@ use Morbzeno\PruebaDePlugin\Models\Blogs;
 use Morbzeno\PruebaDePlugin\Models\Tag;
 use Illuminate\Support\Facades\Gate;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\FileUpload;
 use Filament\Tables;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Components\Select;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BlogsResource extends Resource
 {
     protected static ?string $model = Blogs::class;
+
     protected static ?string $modelLabel = 'Blogs';
+
     protected static ?string $NavigationLabel = 'Blogs';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Publicaciones';
 
     public static function form(Form $form): Form
@@ -36,38 +37,38 @@ class BlogsResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')
-                ->required()
-                ->maxLength(50)
-                ->minLength(5)
-                ->label('Titulo'),
+                    ->required()
+                    ->maxLength(50)
+                    ->minLength(5)
+                    ->label('Titulo'),
 
                 Select::make('author')
-                ->label('Autor')
-                ->relationship(
-                    name: 'users',
-                    titleAttribute: 'name',
-                )
-                ->required()
-                ->preload()
-                ->native(false),
+                    ->label('Autor')
+                    ->relationship(
+                        name: 'users',
+                        titleAttribute: 'name',
+                    )
+                    ->required()
+                    ->preload()
+                    ->native(false),
 
                 Textarea::make('description')
-                ->required()
-                ->label('Descripcion')
-                ->rows(2)
-                ->minLength(2)
-                ->maxLength(1000)
-                ->columnSpan([
-                    'sm' => 2,
-                ]),
-                FileUpload::make("image")
-                ->image()
-                ->disk(config('filament-blog.image.disk', 'public'))
-                ->visibility(config('filament-blog.image.visibility', 'public'))
-                ->directory(config('filament-blog.avatar.directory', 'blog'))
-                ->columnSpan([
-                    'sm' => 2,
-                ]),
+                    ->required()
+                    ->label('Descripcion')
+                    ->rows(2)
+                    ->minLength(2)
+                    ->maxLength(1000)
+                    ->columnSpan([
+                        'sm' => 2,
+                    ]),
+                FileUpload::make('image')
+                    ->image()
+                    ->disk(config('filament-blog.image.disk', 'public'))
+                    ->visibility(config('filament-blog.image.visibility', 'public'))
+                    ->directory(config('filament-blog.avatar.directory', 'blog'))
+                    ->columnSpan([
+                        'sm' => 2,
+                    ]),
 
                 Select::make('category_id')
                 ->label('Categoría')
@@ -76,6 +77,17 @@ class BlogsResource extends Resource
                     titleAttribute: 'name',
                 )
                 ->required()
+                ->native(false),
+            
+            Select::make('tags')
+                ->label('Etiquetas')
+                ->multiple()
+                ->relationship(
+                    name: 'tags',
+                    titleAttribute: 'name',
+                )
+                ->required()
+                ->preload()
                 ->native(false)
                 ->createOptionForm([
                     Forms\Components\TextInput::make('name')
@@ -83,39 +95,10 @@ class BlogsResource extends Resource
                     Forms\Components\TextInput::make('description')
                 ]),
             
-            // Select::make('tags')
-            //     ->label('Etiquetas')
-            //     ->multiple()
-            //     ->relationship(
-            //         name: 'tags',
-            //         titleAttribute: 'name',
-            //     )
-            //     ->required()
-            //     ->preload()
-            //     ->native(false)
-            //     ->createOptionForm([
-            //         Forms\Components\TextInput::make('name')
-            //         ->required(),
-            //         Forms\Components\TextInput::make('description')
-            //     ]),
-            
-            MultiSelect::make('tags')
-            ->label('Etiquetas')
-            ->relationship('tags', 'name') // <- relación Eloquent
-            ->searchable()
-            ->preload()
-            ->createOptionUsing(function (string $value) {
-                $tag = Tag::create(['name' => $value]);
-                return $tag->getKey(); // Retorna el ID como clave
-            })
-            ->required(),
-
-
-            TextInput::make('slug')
-            ->label('slug')
-            ->visible(fn (String $operation) => $operation === 'edit')
-            ->unique(ignoreRecord:true)
-        ]);
+                TextInput::make('slug')
+                ->label('slug')
+                ->visible(fn (String $operation) => $operation === 'edit')
+            ]);
                 
     }
 
@@ -124,13 +107,13 @@ class BlogsResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                ->disk(config('filament-blog.image.disk', 'public'))
-                ->visibility(config('filament-blog.image.visibility', 'public'))
-                ->label(__('Imagen'))
-                ->circular(),
+                    ->disk(config('filament-blog.image.disk', 'public'))
+                    ->visibility(config('filament-blog.image.visibility', 'public'))
+                    ->label(__('Imagen'))
+                    ->circular(),
                 TextColumn::make('title')
                 ->label('Titulo'),
-                TextColumn::make('users.name')
+                TextColumn::make('author')
                 ->label('Autor')
                 
 
@@ -145,7 +128,7 @@ class BlogsResource extends Resource
                 Tables\Actions\Action::make('verBlog')
                     ->label('Ver en pagina')
                     ->url(fn ($record) => url('/blog/' . $record->slug))
-                    ->openUrlInNewTab()
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -169,12 +152,7 @@ class BlogsResource extends Resource
             'edit' => Pages\EditBlogs::route('/{record}/edit'),
         ];
     }
-
-    public static function navigation(): NavigationItem
-    {
-    return parent::navigation()
-        ->visible(auth()->user()?->can('ver_publicacion'));
-    }
+    
     public static function canViewAny(): bool
     {
         return Gate::allows('ver_cualquier_publicacion');
@@ -183,12 +161,12 @@ class BlogsResource extends Resource
     {
         return auth()->user()->can('actualizar_publicacion', $record);
     }
-    
+
     public static function canDeleteAny(): bool
     {
         return auth()->user()->can('eliminar_cualquier_publicacion');
     }
-    
+
     public static function canCreate(): bool
     {
         return auth()->user()->can('crear_publicacion');

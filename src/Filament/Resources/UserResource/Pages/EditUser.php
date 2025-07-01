@@ -2,11 +2,11 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources\UserResource\Pages;
 
-use Morbzeno\PruebaDePlugin\Filament\Resources\UserResource;
+use App\Mail\SendMail;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SendMail;
+use Morbzeno\PruebaDePlugin\Filament\Resources\UserResource;
 
 class EditUser extends EditRecord
 {
@@ -17,14 +17,12 @@ class EditUser extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
-        
-      
+
     }
+
     protected function afterSave(): void
     {
         $user = $this->record;
         Mail::to($user->email)->send(new SendMail($user->name, $user->name));
     }
-
-
 }

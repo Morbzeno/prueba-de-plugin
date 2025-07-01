@@ -14,46 +14,46 @@ class Blogs extends Model
         'title',
         'description',
         'image',
-        'author', 
+        'author',
         'slug',
         'category_id',
     ];
-    
-    public function tags ()
+
+    public function tags()
     {
         return $this->belongsToMany(Tag::class, 'blog_tag', 'blog_id', 'tag_id');
     }
 
-    public function users ()
+    public function users()
     {
         return $this->belongsTo(User::class, 'author');
     }
 
-    public function category ()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    protected static function boot(){
+    protected static function boot()
+    {
         parent::boot();
 
+        static::created(function ($blog) {
+            // Solo si no tenía slug asignado
+            if (! $blog->slug) {
+                $blog->slug = Str::slug($blog->title . '-' . $blog->id);
+                $blog->image = asset('storage/' . ltrim($blog->image, '/'));
+                $blog->saveQuietly();
+            }
+        });
 
-    static::created(function ($blog) {
-        // Solo si no tenía slug asignado
-        if (!$blog->slug) {
-            $blog->slug = Str::slug($blog->title . "-" . $blog->id);
-            $blog->image = asset('storage/' . ltrim($blog->image, '/'));
-            $blog->saveQuietly();
-        }
-    });
-
-    static::updated(function ($blog) {
-        if (!str_ends_with($blog->slug, '-' . $blog->id)) {
-            $blog->slug = Str::slug($blog->slug) . '-' . $blog->id;
-            $blog->image = asset('storage/' . ltrim($blog->image, '/'));
-            $blog->saveQuietly();
-        }
-    });
+        static::updated(function ($blog) {
+            if (! str_ends_with($blog->slug, '-' . $blog->id)) {
+                $blog->slug = Str::slug($blog->slug) . '-' . $blog->id;
+                $blog->image = asset('storage/' . ltrim($blog->image, '/'));
+                $blog->saveQuietly();
+            }
+        });
 
     }
     public static function newFactory()

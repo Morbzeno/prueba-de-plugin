@@ -39,4 +39,4 @@ class BlogsFactory extends Factory
             $blog->tags()->sync($tags);
         });
     }
-};
+}

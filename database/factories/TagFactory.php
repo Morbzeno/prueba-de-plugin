@@ -18,4 +18,4 @@ class TagFactory extends Factory
             'slug' => $this->faker->word(),
         ];
     }
-};
+}

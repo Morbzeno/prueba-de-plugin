@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -11,11 +10,15 @@ use Illuminate\Queue\SerializesModels;
 
 class RoleUpdatedNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public string $user;
+
     public string $role;
+
     public string $changes;
+
     /**
      * Create a new message instance.
      */
@@ -33,7 +36,7 @@ class RoleUpdatedNotification extends Mailable
     {
         return new Envelope(
             from: 'notificaciones@hunabku.com',
-            subject: 'buenos dias '.$this->user,
+            subject: 'buenos dias ' . $this->user,
         );
     }
 

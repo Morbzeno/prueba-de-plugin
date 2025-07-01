@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Vendor\PruebaDePlugin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Morbzeno\PruebaDePlugin\Models\Blogs;
-use Morbzeno\PruebaDePlugin\Models\Tag;
 use Morbzeno\PruebaDePlugin\Models\Category;
-
+use Morbzeno\PruebaDePlugin\Models\Tag;
 
 class BlogController extends Controller
 {
-    function index(){
+    public function index()
+    {
         $blogs = Blogs::with('users')->with('tags')->with('category')->paginate(2);
-        
-        if($blogs->isEmpty()){
+
+        if ($blogs->isEmpty()) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);
@@ -22,15 +21,15 @@ class BlogController extends Controller
 
         return response()->json([
             'message' => 'datos encontrados',
-            'data' => $blogs
+            'data' => $blogs,
         ]);
     }
 
-    function show($slug){
+    public function show($slug)
+    {
         $blogs = Blogs::where('slug', $slug)->with('users')->with('tags')->with('category')->get();
-        
 
-        if($blogs->isEmpty()){
+        if ($blogs->isEmpty()) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);
@@ -38,7 +37,7 @@ class BlogController extends Controller
 
         return response()->json([
             'message' => 'datos encontrados',
-            'data' => $blogs
+            'data' => $blogs,
         ]);
     }
 
@@ -48,8 +47,8 @@ class BlogController extends Controller
         $tags = Tag::withCount('blogs')->inRandomOrder()->paginate(10);
         $randomBlogs = Blogs::latest()->paginate(3);
         $blogs = Blogs::with('users')->with('tags')->with('category')->paginate(2);
-        
-        if($blogs->isEmpty()){
+
+        if ($blogs->isEmpty()) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);
@@ -58,7 +57,6 @@ class BlogController extends Controller
         return view('blog.see', compact('blogs', 'tags', 'categories', 'randomBlogs'));
     }
 
-    
     public function detailBlog($slug)
     {
         $categories = Category::withCount('blog')->inRandomOrder()->paginate(10);
@@ -66,7 +64,7 @@ class BlogController extends Controller
         $randomBlogs = Blogs::inRandomOrder()->paginate(3);
         $blog = Blogs::where('slug', $slug)->with('users')->with('tags')->with('category')->first();
 
-        if(!$blog){
+        if (! $blog) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);
@@ -81,19 +79,18 @@ class BlogController extends Controller
         $tags = Tag::withCount('blogs')->inRandomOrder()->paginate(10);
         $randomBlogs = Blogs::inRandomOrder()->paginate(3);
         $tag = Tag::where('slug', $slug)->first();
-        if(!$tag){
+        if (! $tag) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);
         }
         $blogs = $tag->blogs()->paginate(2);
 
-        if (!$blogs){
+        if (! $blogs) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);
         }
-
 
         return view('tag.see', compact('tag', 'categories', 'tags', 'blogs', 'randomBlogs'));
     }
@@ -104,7 +101,7 @@ class BlogController extends Controller
         $category = Category::where('slug', $slug)->first();
         $randomBlogs = Blogs::inRandomOrder()->paginate(3);
         $tags = Tag::withCount('blogs')->inRandomOrder()->paginate(10);
-        if(!$category){
+        if (! $category) {
             return response()->json([
                 'message' => 'datos no encontrados',
             ]);

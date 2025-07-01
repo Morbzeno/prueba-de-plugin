@@ -14,45 +14,45 @@ return new class extends Migration
 
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->longText("description");
-            $table->string("slug")->unique()->nullable();
+            $table->string('name');
+            $table->longText('description');
+            $table->string('slug')->unique()->nullable();
             $table->timestamps();
         });
 
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->longText("description");
-            $table->string("slug")->unique()->nullable();
+            $table->string('name');
+            $table->longText('description');
+            $table->string('slug')->unique()->nullable();
             $table->timestamps();
         });
 
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
-            $table->string("title");
-            $table->longText("description");
-            $table->string("image")->nullable();
-            $table->string("author");
-            $table->string("slug")->unique()->nullable();
-            $table->string("category_id");
+            $table->string('title');
+            $table->longText('description');
+            $table->string('image')->nullable();
+            $table->string('author');
+            $table->string('slug')->unique()->nullable();
+            $table->string('category_id');
             $table->timestamps();
         });
-        
+
         Schema::create('blog_tag', function (Blueprint $table) {
             $table->foreignId('blog_id')
                 ->constrained('blogs')
                 ->onDelete('cascade');
-        
+
             $table->foreignId('tag_id')
                 ->constrained('tags')
                 ->onDelete('cascade');
-        
-            $table->primary(['blog_id', 'tag_id']); 
-        
+
+            $table->primary(['blog_id', 'tag_id']);
+
             $table->timestamps();
         });
-        
+
     }
 
     /**

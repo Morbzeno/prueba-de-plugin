@@ -2,27 +2,27 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources;
 
-use Morbzeno\PruebaDePlugin\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use Morbzeno\PruebaDePlugin\Models\Category;
-use Illuminate\Support\Facades\Gate;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Morbzeno\PruebaDePlugin\Filament\Resources\CategoryResource\Pages;
+use Morbzeno\PruebaDePlugin\Models\Category;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
+
     protected static ?string $modelLabel = 'categoria';
+
     protected static ?string $NavigationLabel = 'Categorias';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationGroup = 'Publicaciones';
 
     public static function form(Form $form): Form
@@ -30,16 +30,16 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                ->required()
-                ->maxLength(50)
-                ->minLength(4)
-                ->label('Nombre'),
+                    ->required()
+                    ->maxLength(50)
+                    ->minLength(4)
+                    ->label('Nombre'),
 
                 TextInput::make('description')
-                ->required()
-                ->maxLength(500)
-                ->minLength(5)
-                ->label('Descripcion'),
+                    ->required()
+                    ->maxLength(500)
+                    ->minLength(5)
+                    ->label('Descripcion'),
 
                 TextInput::make('slug')
                 ->label('slug')
@@ -53,10 +53,10 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->label('Etiqueta'),
+                    ->label('Etiqueta'),
 
                 TextColumn::make('slug')
-                ->label('Slug'),
+                    ->label('Slug'),
             ])
             ->filters([
                 //
@@ -67,7 +67,7 @@ class CategoryResource extends Resource
                 Tables\Actions\Action::make('verBlog')
                     ->label('Ver en pagina')
                     ->url(fn ($record) => url('/category/' . $record->slug))
-                    ->openUrlInNewTab()
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -91,12 +91,13 @@ class CategoryResource extends Resource
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
+
     public static function navigation(): NavigationItem
     {
-    return parent::navigation()
-        ->visible(auth()->user()?->can('ver_categoría'));
+        return parent::navigation()
+            ->visible(auth()->user()?->can('ver_categoría'));
     }
-    
+
     public static function canViewAny(): bool
     {
         return Gate::allows('ver_cualquier_categoría');
@@ -106,12 +107,12 @@ class CategoryResource extends Resource
     {
         return auth()->user()->can('actualizar_categoría', $record);
     }
-    
+
     public static function canDeleteAny(): bool
     {
         return auth()->user()->can('eliminar_cualquier_categoría');
     }
-    
+
     public static function canCreate(): bool
     {
         return auth()->user()->can('crear_categoría');

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -11,10 +10,13 @@ use Illuminate\Queue\SerializesModels;
 
 class DeleteNoticeMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public string $User;
+
     public string $record;
+
     /**
      * Create a new conten$User instance.
      */
@@ -31,7 +33,7 @@ class DeleteNoticeMail extends Mailable
     {
         return new Envelope(
             from: 'notificaciones@hunabku.com',
-            subject: 'Buenos dias '.$this->User. ', su cuenta ha sido eliminada.',
+            subject: 'Buenos dias ' . $this->User . ', su cuenta ha sido eliminada.',
         );
     }
 
@@ -44,7 +46,7 @@ class DeleteNoticeMail extends Mailable
             view: 'emails.deleteNotice',
             with: [
                 'message' => $this->User,
-                
+
             ]
         );
     }

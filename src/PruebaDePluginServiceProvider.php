@@ -12,11 +12,11 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
+use Morbzeno\PruebaDePlugin\Commands\PruebaDePluginCommand;
+use Morbzeno\PruebaDePlugin\Testing\TestsPruebaDePlugin;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Morbzeno\PruebaDePlugin\Commands\PruebaDePluginCommand;
-use Morbzeno\PruebaDePlugin\Testing\TestsPruebaDePlugin;
 use Morbzeno\PruebaDePlugin\Filament\Resources\RoleResource;
 use Morbzeno\PruebaDePlugin\Filament\Resources\PermissionResource;
 use Filament\Facades\Filament;
@@ -155,6 +155,7 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
             'create_prueba-de-plugin_table',
         ];
     }
+
     public function boot()
     {
         Filament::serving(function () {
@@ -173,17 +174,24 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
             __DIR__.'/../database/migrations/' => database_path('migrations'),
             __DIR__.'/../database/seeders/' => database_path('seeders'),
             __DIR__.'/../database/factories/' => database_path('factories'),
+            __DIR__.'/../resources/views' => resource_path('views'),
             __DIR__.'/../tests' => base_path('tests/'),
             __DIR__.'/../app/Mail' => app_path('mail'),
-            __DIR__ . '/../resources/views' => resource_path('views/'),
-            __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers'),
+            __DIR__ . '/../resources/views' => resource_path('views'),
+            __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers/Vendor/PruebaDePlugin'),
         ], 'prueba-de-plugin-morbzeno');
     
-        $this->registerRoutes();
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'prueba-de-plugin');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'prueba-de-plugin');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'prueba-de-plugin');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'prueba-de-plugin');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+    }
+    protected function registerRoutes()
+    {
+        Route::middleware('web') 
+            ->group(__DIR__ . '/../routes/web.php'); 
     }
     protected function registerRoutes()
     {

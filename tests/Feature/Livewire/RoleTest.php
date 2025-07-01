@@ -2,21 +2,18 @@
 
 namespace Tests\Feature\Livewire;
 
-use Morbzeno\PruebaDePlugin\Models\User;
-use Spatie\Permission\Models\Role;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Livewire\Livewire;
-use Tests\TestCase;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\CreateRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\EditRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ListRoles;
-use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\ViewRole;
-use function Pest\Livewire\livewire;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+use Morbzeno\PruebaDePlugin\Models\User;
+use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 class RoleTest extends TestCase
 {
-      use RefreshDatabase;
+    use RefreshDatabase;
 
     public function test_role_table_renders_for_authorized_user()
     {
@@ -24,7 +21,6 @@ class RoleTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('super_admin');
         $this->actingAs($user);
-
 
         Livewire::test(ListRoles::class)
             ->assertStatus(200)
@@ -37,7 +33,6 @@ class RoleTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('super_admin');
         $this->actingAs($user);
-
 
         Livewire::test(CreateRole::class)
             ->assertStatus(200)
@@ -72,7 +67,6 @@ class RoleTest extends TestCase
         $response->assertStatus(403);
     }
 
-
     public function test_role_create_renders_for_non_authorized_user()
     {
         $this->seed();
@@ -93,17 +87,18 @@ class RoleTest extends TestCase
         $this->actingAs($admin);
         Livewire::test(CreateRole::class)
             ->fillForm([
-                  'name' => 'editorson',
-                  'guard_name' => 'web',
+                'name' => 'editorson',
+                'guard_name' => 'web',
             ])
             ->call('create')
             ->assertHasNoErrors();
 
-            $this->assertDatabaseHas('roles', [
-                  'name' => 'editorson',
-                  'guard_name' => 'web',
-            ]);
+        $this->assertDatabaseHas('roles', [
+            'name' => 'editorson',
+            'guard_name' => 'web',
+        ]);
     }
+
     public function test_role_can_be_edited()
     {
         $this->seed();
@@ -112,11 +107,11 @@ class RoleTest extends TestCase
         $this->actingAs($admin);
 
         Livewire::test(CreateRole::class)
-        ->fillForm([
-              'name' => 'editorson',
-              'guard_name' => 'web',
-        ])
-        ->call('create');
+            ->fillForm([
+                'name' => 'editorson',
+                'guard_name' => 'web',
+            ])
+            ->call('create');
         $role = Role::where('name', 'editorson')->firstOrFail();
 
         Livewire::test(EditRole::class, ['record' => $role->getKey()])
@@ -141,17 +136,16 @@ class RoleTest extends TestCase
         $this->actingAs($admin);
         Livewire::test(CreateRole::class)
             ->fillForm([
-                  'name' => 'editorson',
-                  'guard_name' => 'web',
+                'name' => 'editorson',
+                'guard_name' => 'web',
             ])
             ->call('create')
             ->assertHasNoErrors();
-                $rol = Role::where('name', 'editorson')->first();
-                $rol->delete();
-            $this->assertDatabaseMissing('roles', [
-                  'name' => 'editorson',
-                  'guard_name' => 'web',
-            ]);
+        $rol = Role::where('name', 'editorson')->first();
+        $rol->delete();
+        $this->assertDatabaseMissing('roles', [
+            'name' => 'editorson',
+            'guard_name' => 'web',
+        ]);
     }
-
 }

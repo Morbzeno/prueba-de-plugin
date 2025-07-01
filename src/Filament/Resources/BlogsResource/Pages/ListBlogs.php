@@ -2,9 +2,9 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource\Pages;
 
-use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource;
 
 class ListBlogs extends ListRecords
 {

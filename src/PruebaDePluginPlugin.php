@@ -15,7 +15,7 @@ class PruebaDePluginPlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel
-        ->resources(config('prueba-de-plugin.resources', []));
+            ->resources(config('prueba-de-plugin.resources', []));
     }
 
     public function boot(Panel $panel): void
