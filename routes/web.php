@@ -6,7 +6,7 @@ use Morbzeno\PruebaDePlugin\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
-use App\Http\Controllers\Vendor\PruebaDePlugin\BlogController;
+use App\Http\Controllers\BlogController;
 
 Auth::routes(['verify' => true]);
 

@@ -170,7 +170,15 @@ class BlogsResource extends Resource
         ];
     }
 
-
+    public static function navigation(): NavigationItem
+    {
+    return parent::navigation()
+        ->visible(auth()->user()?->can('ver_publicacion'));
+    }
+    public static function canViewAny(): bool
+    {
+        return Gate::allows('ver_cualquier_publicacion');
+    }
     public static function canEdit(Model $record): bool
     {
         return auth()->user()->can('actualizar_publicacion', $record);

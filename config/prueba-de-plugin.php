@@ -7,5 +7,7 @@ return [
             \Morbzeno\PruebaDePlugin\Filament\Resources\TagsResource::class,
             \Morbzeno\PruebaDePlugin\Filament\Resources\CategoryResource::class,
             \Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource::class,
+            \Morbzeno\PruebaDePlugin\Filament\Resources\RoleResource::class,
+            \Morbzeno\PruebaDePlugin\Filament\Resources\PermissionResource::class,
       ],
 ];

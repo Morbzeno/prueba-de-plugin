@@ -1,6 +1,6 @@
 <?php
  
-namespace Morbzeno\PruebaDePlugin\Database\Seeders;
+namespace Database\Seeders;
  
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-      // $this->call(RolesAndPermissions::class);
-      // $this->call(BlogSeeder::class);
+      $this->call(RolesAndPermissions::class);
+      $this->call(BlogSeeder::class);
       //   DB::table('users')->insert([
       //       'name' => Str::random(10),
       //       'email' => Str::random(10).'@example.com',

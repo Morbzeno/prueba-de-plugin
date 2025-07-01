@@ -1,6 +1,7 @@
 <?php
 
-namespace Morbzeno\PruebaDePlugin\Database\Factories;
+namespace Database\Factories;
+
 // database/factories/BlogFactory.php
 
 use Morbzeno\PruebaDePlugin\Models\Blogs;
@@ -12,14 +13,16 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class BlogsFactory extends Factory
 {
 
+    protected $model = Blogs::class;
+
     public function definition(): array
     {
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
             'image' => $this->faker->imageUrl(),
-            'author' => User::factory(),
-            'category_id' => Category::factory(), // si tienes categoría relacionada
+            'author' => \Database\Factories\UserFactory::new()->create(),
+            'category_id' => \Database\Factories\CategoryFactory::new()->create()->id, // si tienes categoría relacionada
         ];
     }
 

@@ -2,6 +2,8 @@
 
 namespace Morbzeno\PruebaDePlugin;
 
+use Illuminate\Support\Facades\Route;
+
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -15,6 +17,10 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Morbzeno\PruebaDePlugin\Commands\PruebaDePluginCommand;
 use Morbzeno\PruebaDePlugin\Testing\TestsPruebaDePlugin;
+use Morbzeno\PruebaDePlugin\Filament\Resources\RoleResource;
+use Morbzeno\PruebaDePlugin\Filament\Resources\PermissionResource;
+use Filament\Facades\Filament;
+
 
 class PruebaDePluginServiceProvider extends PackageServiceProvider
 {
@@ -151,7 +157,18 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
     }
     public function boot()
     {
+        Filament::serving(function () {
+            Filament::registerResources([
+                RoleResource::class,
+            ]);
+        });
 
+        Filament::serving(function () {
+            Filament::registerResources([
+                PermissionResource::class,
+            ]);
+        });
+        
         $this->publishes([
             __DIR__.'/../database/migrations/' => database_path('migrations'),
             __DIR__.'/../database/seeders/' => database_path('seeders'),
@@ -162,11 +179,15 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
             __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers'),
         ], 'prueba-de-plugin-morbzeno');
     
-
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->registerRoutes();
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'prueba-de-plugin');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'prueba-de-plugin');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+    }
+    protected function registerRoutes()
+    {
+        Route::middleware('web') 
+            ->group(__DIR__ . '/../routes/web.php'); 
     }
 }
