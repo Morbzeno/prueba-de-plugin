@@ -19,16 +19,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Validation\Rules\Unique;
-use Spatie\Permission\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rules\Unique;
+use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
-
-
     public static function isScopedToTenant(): bool
     {
         return config('filament-spatie-roles-permissions.scope_roles_to_tenant', config('filament-spatie-roles-permissions.scope_to_tenant', true));
@@ -36,7 +34,7 @@ class RoleResource extends Resource
 
     public static function getNavigationIcon(): ?string
     {
-        return  config('filament-spatie-roles-permissions.icons.role_navigation');
+        return config('filament-spatie-roles-permissions.icons.role_navigation');
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -61,7 +59,7 @@ class RoleResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        return  config('filament-spatie-roles-permissions.sort.role_navigation');
+        return config('filament-spatie-roles-permissions.sort.role_navigation');
     }
 
     public static function getPluralLabel(): string
@@ -91,6 +89,7 @@ class RoleResource extends Resource
                                             // Check uniqueness against current user/team
                                             $rule->where(config('permission.column_names.team_foreign_key', 'team_id'), Filament::getTenant()->id);
                                         }
+
                                         return $rule;
                                     }),
 
@@ -98,19 +97,19 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                     ->options(config('filament-spatie-roles-permissions.guard_names'))
                                     ->default(config('filament-spatie-roles-permissions.default_guard_name'))
-                                    ->visible(fn() => config('filament-spatie-roles-permissions.should_show_guard', true))
+                                    ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true))
                                     ->required(),
 
-                                    CheckboxList::make('permissions')
+                                CheckboxList::make('permissions')
                                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.permissions'))
                                     ->relationship(
                                         name: 'permissions',
                                         titleAttribute: 'name',
-                                        modifyQueryUsing: fn(Builder $query) => $query->orderBy('name'),
+                                        modifyQueryUsing: fn (Builder $query) => $query->orderBy('name'),
                                     )
                                     ->columns(4)
                                     ->columnSpanFull()
-                                    ->bulkToggleable() 
+                                    ->bulkToggleable()
                                     ->visible(config('filament-spatie-roles-permissions.should_show_permissions_for_roles')),
                             ]),
                     ]),
@@ -149,7 +148,7 @@ class RoleResource extends Resource
             ->emptyStateActions(
                 config('filament-spatie-roles-permissions.should_remove_empty_state_actions.roles') ? [] :
                     [
-                        Tables\Actions\CreateAction::make()
+                        Tables\Actions\CreateAction::make(),
                     ]
             );
     }
@@ -185,12 +184,13 @@ class RoleResource extends Resource
             'view' => ViewRole::route('/{record}'),
         ];
     }
+
     public static function navigation(): NavigationItem
     {
-    return parent::navigation()
-        ->visible(auth()->user()?->can('ver_rol'));
+        return parent::navigation()
+            ->visible(auth()->user()?->can('ver_rol'));
     }
-    
+
     public static function canViewAny(): bool
     {
         return Gate::allows('ver_cualquier_rol');
@@ -200,12 +200,12 @@ class RoleResource extends Resource
     {
         return auth()->user()->can('actualizar_rol', $record);
     }
-    
+
     public static function canDeleteAny(): bool
     {
         return auth()->user()->can('eliminar_cualquier_rol');
     }
-    
+
     public static function canCreate(): bool
     {
         return auth()->user()->can('crear_rol');

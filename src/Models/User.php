@@ -60,14 +60,13 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-public function Blog ()
-{
-    return $this->belongsOne(Blogs::class);
-}
-public static function newFactory()
-{
-    return \Database\Factories\UserFactory::new();
-}
+    public function Blog()
+    {
+        return $this->belongsOne(Blogs::class);
+    }
 
-    
+    public static function newFactory()
+    {
+        return \Database\Factories\UserFactory::new();
+    }
 }

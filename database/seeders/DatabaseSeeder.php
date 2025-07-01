@@ -14,12 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-      $this->call(RolesAndPermissions::class);
-      $this->call(BlogSeeder::class);
-      //   DB::table('users')->insert([
-      //       'name' => Str::random(10),
-      //       'email' => Str::random(10).'@example.com',
-      //       'password' => Hash::make('password'),
-      //   ]);
+        $this->call(RolesAndPermissions::class);
+        $this->call(BlogSeeder::class);
+        //   DB::table('users')->insert([
+        //       'name' => Str::random(10),
+        //       'email' => Str::random(10).'@example.com',
+        //       'password' => Hash::make('password'),
+        //   ]);
     }
 }

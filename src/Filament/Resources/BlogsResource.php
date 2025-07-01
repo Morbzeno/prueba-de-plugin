@@ -2,12 +2,6 @@
 
 namespace Morbzeno\PruebaDePlugin\Filament\Resources;
 
-use Filament\Forms\Components\MultiSelect;
-use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource\Pages;
-use App\Filament\Resources\BlogsResource\RelationManagers;
-use Morbzeno\PruebaDePlugin\Models\Blogs;
-use Morbzeno\PruebaDePlugin\Models\Tag;
-use Illuminate\Support\Facades\Gate;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -19,6 +13,9 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Morbzeno\PruebaDePlugin\Filament\Resources\BlogsResource\Pages;
+use Morbzeno\PruebaDePlugin\Models\Blogs;
 
 class BlogsResource extends Resource
 {
@@ -71,35 +68,35 @@ class BlogsResource extends Resource
                     ]),
 
                 Select::make('category_id')
-                ->label('Categoría')
-                ->relationship(
-                    name: 'category',
-                    titleAttribute: 'name',
-                )
-                ->required()
-                ->native(false),
-            
-            Select::make('tags')
-                ->label('Etiquetas')
-                ->multiple()
-                ->relationship(
-                    name: 'tags',
-                    titleAttribute: 'name',
-                )
-                ->required()
-                ->preload()
-                ->native(false)
-                ->createOptionForm([
-                    Forms\Components\TextInput::make('name')
-                    ->required(),
-                    Forms\Components\TextInput::make('description')
-                ]),
-            
+                    ->label('Categoría')
+                    ->relationship(
+                        name: 'category',
+                        titleAttribute: 'name',
+                    )
+                    ->required()
+                    ->native(false),
+
+                Select::make('tags')
+                    ->label('Etiquetas')
+                    ->multiple()
+                    ->relationship(
+                        name: 'tags',
+                        titleAttribute: 'name',
+                    )
+                    ->required()
+                    ->preload()
+                    ->native(false)
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
+                        Forms\Components\TextInput::make('description'),
+                    ]),
+
                 TextInput::make('slug')
-                ->label('slug')
-                ->visible(fn (String $operation) => $operation === 'edit')
+                    ->label('slug')
+                    ->visible(fn (string $operation) => $operation === 'edit'),
             ]);
-                
+
     }
 
     public static function table(Table $table): Table
@@ -112,11 +109,9 @@ class BlogsResource extends Resource
                     ->label(__('Imagen'))
                     ->circular(),
                 TextColumn::make('title')
-                ->label('Titulo'),
+                    ->label('Titulo'),
                 TextColumn::make('author')
-                ->label('Autor')
-                
-
+                    ->label('Autor'),
 
             ])
             ->filters([
@@ -152,11 +147,12 @@ class BlogsResource extends Resource
             'edit' => Pages\EditBlogs::route('/{record}/edit'),
         ];
     }
-    
+
     public static function canViewAny(): bool
     {
         return Gate::allows('ver_cualquier_publicacion');
     }
+
     public static function canEdit(Model $record): bool
     {
         return auth()->user()->can('actualizar_publicacion', $record);
@@ -173,25 +169,24 @@ class BlogsResource extends Resource
     }
 
     protected static function syncTags(Form $form, Model $post): void
-{
-    $tagNames = collect($form->getState()['tags'])
-        ->map(fn($tag) => trim($tag))
-        ->filter()
-        ->unique();
+    {
+        $tagNames = collect($form->getState()['tags'])
+            ->map(fn ($tag) => trim($tag))
+            ->filter()
+            ->unique();
 
-    $tagIds = [];
+        $tagIds = [];
 
-    foreach ($tagNames as $name) {
-        $tag = \App\Models\Tag::firstOrCreate([
-            'name' => $name,
-        ], [
-            'slug' => \Str::slug($name),
-        ]);
+        foreach ($tagNames as $name) {
+            $tag = \App\Models\Tag::firstOrCreate([
+                'name' => $name,
+            ], [
+                'slug' => \Str::slug($name),
+            ]);
 
-        $tagIds[] = $tag->id;
+            $tagIds[] = $tag->id;
+        }
+
+        $post->tags()->sync($tagIds);
     }
-
-    $post->tags()->sync($tagIds);
-}
-
 }

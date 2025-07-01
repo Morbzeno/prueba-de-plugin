@@ -46,7 +46,7 @@ class BlogTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('super_admin');
         $this->actingAs($user);
-    
+
         $blog = \Database\Factories\BlogsFactory::new()->create();
 
         Livewire::test(EditBlogs::class, ['record' => $blog->getKey()])
@@ -84,11 +84,11 @@ class BlogTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('viewer');
         $this->actingAs($user);
-    
+
         $userToEdit = Blogs::factory()->create();
-    
+
         $response = $this->get(EditBlogs::getUrl(['record' => $userToEdit->getKey()]));
-    
+
         $response->assertStatus(403);
     }
 

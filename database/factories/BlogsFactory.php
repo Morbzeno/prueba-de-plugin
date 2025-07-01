@@ -4,15 +4,12 @@ namespace Database\Factories;
 
 // database/factories/BlogFactory.php
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Morbzeno\PruebaDePlugin\Models\Blogs;
 use Morbzeno\PruebaDePlugin\Models\Tag;
-use Morbzeno\PruebaDePlugin\Models\User;
-use Morbzeno\PruebaDePlugin\Models\Category;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BlogsFactory extends Factory
 {
-
     protected $model = Blogs::class;
 
     public function definition(): array

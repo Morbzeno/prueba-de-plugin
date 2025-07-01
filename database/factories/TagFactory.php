@@ -2,14 +2,13 @@
 
 namespace Database\Factories;
 
-
-use Morbzeno\PruebaDePlugin\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Morbzeno\PruebaDePlugin\Models\Tag;
 
 class TagFactory extends Factory
 {
     protected $model = Tag::class;
-    
+
     public function definition(): array
     {
         return [

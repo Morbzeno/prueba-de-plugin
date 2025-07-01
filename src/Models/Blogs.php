@@ -56,9 +56,9 @@ class Blogs extends Model
         });
 
     }
+
     public static function newFactory()
     {
         return \Database\Factories\BlogsFactory::new();
     }
-
 }

@@ -2,8 +2,7 @@
 
 namespace Morbzeno\PruebaDePlugin;
 
-use Illuminate\Support\Facades\Route;
-
+use Filament\Facades\Filament;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -11,16 +10,15 @@ use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Route;
 use Livewire\Features\SupportTesting\Testable;
 use Morbzeno\PruebaDePlugin\Commands\PruebaDePluginCommand;
+use Morbzeno\PruebaDePlugin\Filament\Resources\PermissionResource;
+use Morbzeno\PruebaDePlugin\Filament\Resources\RoleResource;
 use Morbzeno\PruebaDePlugin\Testing\TestsPruebaDePlugin;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Morbzeno\PruebaDePlugin\Filament\Resources\RoleResource;
-use Morbzeno\PruebaDePlugin\Filament\Resources\PermissionResource;
-use Filament\Facades\Filament;
-
 
 class PruebaDePluginServiceProvider extends PackageServiceProvider
 {
@@ -169,33 +167,34 @@ class PruebaDePluginServiceProvider extends PackageServiceProvider
                 PermissionResource::class,
             ]);
         });
-        
-        $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations'),
-            __DIR__.'/../database/seeders/' => database_path('seeders'),
-            __DIR__.'/../database/factories/' => database_path('factories'),
-            __DIR__.'/../resources/views' => resource_path('views'),
-            __DIR__.'/../tests' => base_path('tests/'),
-            __DIR__.'/../app/Mail' => app_path('mail'),
-            __DIR__ . '/../resources/views' => resource_path('views'),
-            __DIR__.'/../app/Http/Controllers' => app_path('Http/Controllers/Vendor/PruebaDePlugin'),
-        ], 'prueba-de-plugin-morbzeno');
-    
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->publishes([
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
+            __DIR__ . '/../database/seeders/' => database_path('seeders'),
+            __DIR__ . '/../database/factories/' => database_path('factories'),
+            __DIR__ . '/../resources/views' => resource_path('views'),
+            __DIR__ . '/../tests' => base_path('tests/'),
+            __DIR__ . '/../app/Mail' => app_path('mail'),
+            __DIR__ . '/../resources/views' => resource_path('views'),
+            __DIR__ . '/../app/Http/Controllers' => app_path('Http/Controllers/Vendor/PruebaDePlugin'),
+        ], 'prueba-de-plugin-morbzeno');
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'prueba-de-plugin');
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'prueba-de-plugin');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
+
     protected function registerRoutes()
     {
-        Route::middleware('web') 
-            ->group(__DIR__ . '/../routes/web.php'); 
+        Route::middleware('web')
+            ->group(__DIR__ . '/../routes/web.php');
     }
+
     protected function registerRoutes()
     {
-        Route::middleware('web') 
-            ->group(__DIR__ . '/../routes/web.php'); 
+        Route::middleware('web')
+            ->group(__DIR__ . '/../routes/web.php');
     }
 }

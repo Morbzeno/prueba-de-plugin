@@ -23,21 +23,21 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Model;
 
 class PermissionResource extends Resource
 {
     public static function isScopedToTenant(): bool
     {
         return config('filament-spatie-roles-permissions.scope_premissions_to_tenant', config('filament-spatie-roles-permissions.scope_to_tenant', true));
-    }   
+    }
 
     public static function getNavigationIcon(): ?string
     {
-        return  config('filament-spatie-roles-permissions.icons.permission_navigation');
+        return config('filament-spatie-roles-permissions.icons.permission_navigation');
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -62,7 +62,7 @@ class PermissionResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        return  config('filament-spatie-roles-permissions.sort.permission_navigation');
+        return config('filament-spatie-roles-permissions.sort.permission_navigation');
     }
 
     public static function getPluralLabel(): string
@@ -89,9 +89,9 @@ class PermissionResource extends Resource
                                 ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                                 ->options(config('filament-spatie-roles-permissions.guard_names'))
                                 ->default(config('filament-spatie-roles-permissions.default_guard_name'))
-                                ->visible(fn() => config('filament-spatie-roles-permissions.should_show_guard', true))
+                                ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true))
                                 ->live()
-                                ->afterStateUpdated(fn(Set $set) => $set('roles', null))
+                                ->afterStateUpdated(fn (Set $set) => $set('roles', null))
                                 ->required(),
                             Select::make('roles')
                                 ->multiple()
@@ -100,12 +100,13 @@ class PermissionResource extends Resource
                                     name: 'roles',
                                     titleAttribute: 'name',
                                     modifyQueryUsing: function (Builder $query, Get $get) {
-                                        if (!empty($get('guard_name'))) {
+                                        if (! empty($get('guard_name'))) {
                                             $query->where('guard_name', $get('guard_name'));
                                         }
                                         if (config('permission.teams', false) && Filament::hasTenancy()) {
                                             return $query->where(config('permission.column_names.team_foreign_key'), Filament::getTenant()->id);
                                         }
+
                                         return $query;
                                     }
                                 )
@@ -129,14 +130,14 @@ class PermissionResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: config('filament-spatie-roles-permissions.toggleable_guard_names.permissions.isToggledHiddenByDefault', true))
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.guard_name'))
                     ->searchable()
-                    ->visible(fn() => config('filament-spatie-roles-permissions.should_show_guard', true)),
+                    ->visible(fn () => config('filament-spatie-roles-permissions.should_show_guard', true)),
             ])
             ->filters([
                 SelectFilter::make('models')
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.field.models'))
                     ->multiple()
                     ->options(function () {
-                        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
+                        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission;
 
                         /** @var \ReflectionClass[] */
                         $models = $commands->getAllModels();
@@ -178,7 +179,7 @@ class PermissionResource extends Resource
                     ->label(__('filament-spatie-roles-permissions::filament-spatie.action.attach_to_roles'))
                     ->action(function (Collection $records, array $data): void {
                         Role::whereIn('id', $data['roles'])->each(function (Role $role) use ($records): void {
-                            $records->each(fn(Permission $permission) => $role->givePermissionTo($permission));
+                            $records->each(fn (Permission $permission) => $role->givePermissionTo($permission));
                         });
                     })
                     ->form([
@@ -192,7 +193,7 @@ class PermissionResource extends Resource
             ->emptyStateActions(
                 config('filament-spatie-roles-permissions.should_remove_empty_state_actions.permissions') ? [] :
                     [
-                        Tables\Actions\CreateAction::make()
+                        Tables\Actions\CreateAction::make(),
                     ]
             );
     }
@@ -223,12 +224,13 @@ class PermissionResource extends Resource
             'view' => ViewPermission::route('/{record}'),
         ];
     }
+
     public static function navigation(): NavigationItem
     {
-    return parent::navigation()
-        ->visible(auth()->user()?->can('ver_permiso'));
+        return parent::navigation()
+            ->visible(auth()->user()?->can('ver_permiso'));
     }
-    
+
     public static function canViewAny(): bool
     {
         return Gate::allows('ver_cualquier_permiso');
@@ -238,12 +240,12 @@ class PermissionResource extends Resource
     {
         return auth()->user()->can('actualizar_permiso', $record);
     }
-    
+
     public static function canDeleteAny(): bool
     {
         return auth()->user()->can('eliminar_cualquier_permiso');
     }
-    
+
     public static function canCreate(): bool
     {
         return auth()->user()->can('crear_permiso');
